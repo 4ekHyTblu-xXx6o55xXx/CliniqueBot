@@ -165,7 +165,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
         await message.answer("Вы временно заблокированы. Попробуйте позже.")
         return
     await state.set_state(Form.name)
-    await message.answer("🦷 Здравствуйте! Я — бот стоматологии «32 зуба». Помогу вам записаться на приём. Как Вас зовут? 😊")
+    await message.answer("🦷 Здравствуйте! Я — бот стоматологии «33 зуба». Помогу вам записаться на приём. Как Вас зовут? 😊")
 
 
 @dp.message(Form.name, F.text)
