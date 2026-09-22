@@ -188,6 +188,7 @@ async def process_name(message: types.Message, state: FSMContext):
 
 @dp.message(Form.phone, F.text)
 async def process_phone(message: types.Message, state: FSMContext):
+    user_id = message.from_user.id
     phone = message.text.strip()
     if message.text and message.text.startswith('/'):
         await state.clear()
@@ -362,6 +363,15 @@ async def handle_unexpected(message: types.Message, state: FSMContext):
         await bot.send_message(ADMIN_ID, f"❓ Вопрос от пользователя!\nID: {user_id}\nUsername: @{message.from_user.username}\nВопрос: {text}")
     except Exception as e:
         logging.error(f"Не удалось уведомить админа: {e}")
+
+@dp.errors()
+async def errors_handler(update: types.Update, exception: Exception):
+    logging.error(f"Критическая ошибка при обработке апдейта {update.update_id}: {exception}")
+    try:
+        await bot.send_message(ADMIN_ID, f"⚠️ Ошибка в боте:\n{exception}")
+    except Exception:
+        pass
+    return True
 
 async def main():
     logging.info("Бот запускается...")
