@@ -225,7 +225,7 @@ async def process_time(message: types.Message, state: FSMContext):
     if success:
         user_application_counts[user_id] += 1
     await state.clear()
-    await message.answer(f"Спасибо, {data['name']}! ✅ Мы получили вашу заявку. Менеджер стоматологии «32 зуба» свяжется с вами в ближайшее время! 🦷✨")
+    await message.answer(f"Спасибо, {data['name']}! ✅ Мы получили вашу заявку. Менеджер стоматологии «33 зуба» свяжется с вами в ближайшее время! 🦷✨")
 
 # АДМИН-КОМАНДЫ
 @dp.message(Command("admin"))
