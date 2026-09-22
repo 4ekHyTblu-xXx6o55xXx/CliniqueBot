@@ -82,8 +82,9 @@ def validate_name(name: str) -> bool:
     name = name.strip().lower()
     if len(name) < 2:
         return False
-    bad_words = ['хуй', 'пизд', 'бля', 'еба', 'сук', 'муд', 'fuck', 'shit']
-    if any(word in name for word in bad_words):
+    words = re.findall(r'[a-zA-Zа-яА-ЯёЁ]+', name)
+    bad_words = ['хуй', 'пизда', 'бля', 'еба', 'ебу', 'ебал', 'сука', 'мудак', 'fuck', 'shit']
+    if any(word in bad_words for word in words):
         return False
     if not re.match(r'^[a-zA-Zа-яА-ЯёЁ\s\-]+$', name):
         return False
@@ -348,11 +349,11 @@ async def handle_unexpected(message: types.Message, state: FSMContext):
     farewells = ['пока', 'прощай', 'свидания', 'досвидания', 'бай', 'bye']
 
     if is_fuzzy_match(text, thanks):
-        await message.answer.lower("Пожалуйста! Всегда рад помочь. 😊 Если появятся вопросы — пишите.")
+        await message.answer("Пожалуйста! Всегда рад помочь. 😊 Если появятся вопросы — пишите.")
         return
 
     if is_fuzzy_match(text, farewells):
-        await message.answer.lower("До свидания! 👋 Если что - обращайтесь.")
+        await message.answer("До свидания! 👋 Если что - обращайтесь.")
         return
 
     if answer:
@@ -365,10 +366,10 @@ async def handle_unexpected(message: types.Message, state: FSMContext):
         logging.error(f"Не удалось уведомить админа: {e}")
 
 @dp.errors()
-async def errors_handler(update: types.Update, exception: Exception):
-    logging.error(f"Критическая ошибка при обработке апдейта {update.update_id}: {exception}")
+async def errors_handler(event: types.ErrorEvent):
+    logging.error(f"Критическая ошибка при обработке апдейта: {event.exception}")
     try:
-        await bot.send_message(ADMIN_ID, f"⚠️ Ошибка в боте:\n{exception}")
+        await bot.send_message(ADMIN_ID, f"⚠️ Ошибка в боте:\n{event.exception}")
     except Exception:
         pass
     return True
